@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
+
+struct msgbuf { long mtype; char mtext[256]; };
+
+int main(){
+    key_t key = ftok("/tmp", 'Q');
+    int msqid = msgget(key, IPC_CREAT | 0666);
+    if (msqid < 0){ perror("msgget"); return 1; }
+
+    pid_t pid = fork();
+    if (pid < 0){ perror("fork"); return 1; }
+    if (pid == 0){
+        struct msgbuf msg; msg.mtype = 1;
+        strcpy(msg.mtext, "Message from child via msg queue");
+        if (msgsnd(msqid, &msg, sizeof(msg.mtext), 0) < 0) { perror("msgsnd"); }
+        return 0;
+    } else {
+        struct msgbuf rcv;
+        if (msgrcv(msqid, &rcv, sizeof(rcv.mtext), 1, 0) < 0) { perror("msgrcv"); }
+        else printf("Parent received: %s\n", rcv.mtext);
+        msgctl(msqid, IPC_RMID, NULL);
+    }
+    return 0;
+}

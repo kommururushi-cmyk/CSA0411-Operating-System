@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <limits.h>
+
+int main(){
+    int n; printf("Number of processes: "); scanf("%d", &n);
+    int bt[n], pr[n];
+    for(int i=0;i<n;i++){ printf("P%d burst: ", i+1); scanf("%d", &bt[i]); printf("P%d priority (lower number = higher priority): ", i+1); scanf("%d", &pr[i]); }
+
+    int done[n]; for(int i=0;i<n;i++) done[i]=0;
+    int wt[n], tat[n];
+    int time=0, completed=0;
+    while (completed < n) {
+        int idx=-1; int best=INT_MAX;
+        for (int i=0;i<n;i++) if (!done[i] && pr[i] < best) { best = pr[i]; idx=i; }
+        if (idx==-1) break;
+        wt[idx] = time; // arrival 0
+        time += bt[idx];
+        tat[idx] = time;
+        done[idx]=1; completed++;
+    }
+    double awt=0, atat=0;
+    printf("P\tBT\tPR\tWT\tTAT\n");
+    for(int i=0;i<n;i++){ printf("P%d\t%d\t%d\t%d\t%d\n", i+1, bt[i], pr[i], wt[i], tat[i]); awt+=wt[i]; atat+=tat[i]; }
+    printf("Avg WT=%.2f Avg TAT=%.2f\n", awt/n, atat/n);
+    return 0;
+}

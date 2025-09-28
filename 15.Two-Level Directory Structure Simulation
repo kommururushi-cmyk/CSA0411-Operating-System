@@ -1,0 +1,60 @@
+#include <stdio.h>
+} dir[10];
+
+int main() {
+    int dcount = 0, ch;
+    char d[20], f[20];
+    while (1) {
+        printf("\n1. Create Directory\n2. Create File\n3. Delete File\n4. List\n5. Exit\nEnter choice: ");
+        scanf("%d", &ch);
+        switch (ch) {
+            case 1:
+                printf("Enter directory name: ");
+                scanf("%s", d);
+                strcpy(dir[dcount].dname, d);
+                dir[dcount].fcount = 0;
+                dcount++;
+                break;
+            case 2:
+                printf("Enter directory name: ");
+                scanf("%s", d);
+                for (int i = 0; i < dcount; i++) {
+                    if (strcmp(d, dir[i].dname) == 0) {
+                        printf("Enter filename: ");
+                        scanf("%s", f);
+                        strcpy(dir[i].fname[dir[i].fcount], f);
+                        dir[i].fcount++;
+                        break;
+                    }
+                }
+                break;
+            case 3:
+                printf("Enter directory name: ");
+                scanf("%s", d);
+                printf("Enter filename to delete: ");
+                scanf("%s", f);
+                for (int i = 0; i < dcount; i++) {
+                    if (strcmp(d, dir[i].dname) == 0) {
+                        for (int j = 0; j < dir[i].fcount; j++) {
+                            if (strcmp(f, dir[i].fname[j]) == 0) {
+                                strcpy(dir[i].fname[j], dir[i].fname[dir[i].fcount-1]);
+                                dir[i].fcount--;
+                                printf("File deleted.\n");
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 4:
+                for (int i = 0; i < dcount; i++) {
+                    printf("Directory %s:\n", dir[i].dname);
+                    for (int j = 0; j < dir[i].fcount; j++)
+                        printf("  %s\n", dir[i].fname[j]);
+                }
+                break;
+            case 5:
+                return 0;
+        }
+    }
+}

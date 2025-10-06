@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main() {
+    int n;
+    printf("Enter number of blocks in file: ");
+    scanf("%d",&n);
+    int next[n];
+    printf("Enter next block pointers (-1 for last block):\n");
+    for(int i=0;i<n;i++) scanf("%d",&next[i]);
+    int start;
+    printf("Enter starting block: ");
+    scanf("%d",&start);
+    printf("File blocks linked sequence:\n");
+    int cur=start;
+    while(cur!=-1) {
+        printf("Block %d -> ", cur);
+        cur = next[cur];
+    }
+    printf("NULL\n");
+    return 0;
+}

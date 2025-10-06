@@ -1,0 +1,15 @@
+// worst_fit.c
+#include <stdio.h>
+
+int main() {
+    int nb, np, i, j;
+
+    printf("Enter number of memory blocks: ");
+    scanf("%d", &nb);
+
+    int blockSize[nb], blockAllocated[nb];
+    printf("Enter size of each block:\n");
+    for (i = 0; i < nb; i++) {
+        printf("Block %d: ", i + 1);
+        scanf("%d", &blockSize[i]);
+        blo

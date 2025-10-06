@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main() {
+    int n, start;
+    printf("Enter number of records: ");
+    scanf("%d",&n);
+    printf("Enter starting block number: ");
+    scanf("%d",&start);
+    printf("File blocks allocated sequentially:\n");
+    for(int i=0;i<n;i++) printf("Block %d\n", start+i);
+    return 0;
+}

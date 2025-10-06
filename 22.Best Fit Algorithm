@@ -1,0 +1,60 @@
+// best_fit.c
+#include <stdio.h>
+
+int main() {
+    int nb, np, i, j;
+
+    printf("Enter number of memory blocks: ");
+    scanf("%d", &nb);
+
+    int blockSize[nb], blockAllocated[nb];
+    printf("Enter size of each block:\n");
+    for (i = 0; i < nb; i++) {
+        printf("Block %d: ", i + 1);
+        scanf("%d", &blockSize[i]);
+        blockAllocated[i] = 0; // initially free
+    }
+
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+
+    int processSize[np], allocation[np];
+    printf("Enter size of each process:\n");
+    for (i = 0; i < np; i++) {
+        printf("Process %d: ", i + 1);
+        scanf("%d", &processSize[i]);
+        allocation[i] = -1; // not allocated
+    }
+
+    // Best Fit allocation logic
+    for (i = 0; i < np; i++) {
+        int bestIndex = -1;
+        for (j = 0; j < nb; j++) {
+            if (!blockAllocated[j] && blockSize[j] >= processSize[i]) {
+                if (bestIndex == -1 || blockSize[j] < blockSize[bestIndex])
+                    bestIndex = j;
+            }
+        }
+        if (bestIndex != -1) {
+            allocation[i] = bestIndex;
+            blockAllocated[bestIndex] = 1; // mark block as allocated
+            printf("Process %d of size %d allocated to Block %d (size %d)\n",
+                   i + 1, processSize[i], bestIndex + 1, blockSize[bestIndex]);
+        } else {
+            printf("Process %d of size %d not allocated (no suitable block)\n",
+                   i + 1, processSize[i]);
+        }
+    }
+
+    // Display summary
+    printf("\n--- Allocation Summary ---\n");
+    printf("Process No.\tProcess Size\tBlock No.\n");
+    for (i = 0; i < np; i++) {
+        if (allocation[i] != -1)
+            printf("%d\t\t%d\t\t%d\n", i + 1, processSize[i], allocation[i] + 1);
+        else
+            printf("%d\t\t%d\t\tNot Allocated\n", i + 1, processSize[i]);
+    }
+
+    return 0;
+}

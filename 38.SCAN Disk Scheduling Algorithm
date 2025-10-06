@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, head, i, j, temp, seek=0, direction;
+    printf("Enter number of requests: ");
+    scanf("%d",&n);
+    int req[n];
+    printf("Enter request queue: ");
+    for(i=0;i<n;i++) scanf("%d",&req[i]);
+    printf("Enter initial head position: ");
+    scanf("%d",&head);
+    printf("Enter direction (0=left,1=right): ");
+    scanf("%d",&direction);
+
+    // Add head and disk limits
+    req[n] = head; // Include current head
+    n++;
+
+    // Sort request array
+    for(i=0;i<n-1;i++)
+        for(j=i+1;j<n;j++)
+            if(req[i]>req[j]){
+                temp=req[i]; req[i]=req[j]; req[j]=temp;
+            }
+
+    int idx;
+    for(i=0;i<n;i++) if(req[i]==head) { idx=i; break; }
+
+    printf("SCAN sequence:\n");
+    if(direction==1){ // moving right
+        for(i=idx;i<n;i++) { printf("%d ", req[i]); if(i>0) seek+=abs(req[i]-req[i-1]); }
+        for(i=idx-1;i>=0;i--) { printf("%d ", req[i]); if(i<n-1) seek+=abs(req[i]-req[i+1]); }
+    } else { // moving left
+        for(i=idx;i>=0;i--) { printf("%d ", req[i]); if(i<n-1) seek+=abs(req[i]-req[i+1]); }
+        for(i=idx+1;i<n;i++) { printf("%d ", req[i]); if(i>0) seek+=abs(req[i]-req[i-1]); }
+    }
+    printf("\nTotal seek operations: %d\n", seek);
+    return 0;
+}

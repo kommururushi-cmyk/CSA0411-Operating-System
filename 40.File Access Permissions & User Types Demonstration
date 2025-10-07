@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main() {
+    char filename[100];
+    printf("Enter file name to check permissions: ");
+    scanf("%s", filename);
+
+    struct stat st;
+    if(stat(filename,&st)!=0){ perror("stat"); return 1; }
+
+    printf("File Permissions for '%s':\n", filename);
+    printf("Owner: ");
+    printf("%c%c%c\n", (st.st_mode & S_IRUSR)?'r':'-', (st.st_mode & S_IWUSR)?'w':'-', (st.st_mode & S_IXUSR)?'x':'-');
+    printf("Group: ");
+    printf("%c%c%c\n", (st.st_mode & S_IRGRP)?'r':'-', (st.st_mode & S_IWGRP)?'w':'-', (st.st_mode & S_IXGRP)?'x':'-');
+    printf("Others: ");
+    printf("%c%c%c\n", (st.st_mode & S_IROTH)?'r':'-', (st.st_mode & S_IWOTH)?'w':'-', (st.st_mode & S_IXOTH)?'x':'-');
+
+    printf("\nUser Types:\nOwner -> User who created the file\nGroup -> Users in same group\nOthers -> Everyone else\n");
+    return 0;
+}
